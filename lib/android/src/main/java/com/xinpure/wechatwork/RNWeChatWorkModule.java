@@ -128,6 +128,18 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
     iwwapi.sendMessage(link);
   }
 
+  @ReactMethod
+  public void shareMedia(ReadableMap data) {
+    if (iwwapi == null) {
+      return;
+    }
+    WWMediaImage img = new WWMediaImage();
+    img.filePath = data.imageUrl;
+    img.appId = APPID;
+    img.agentId = AGENTID;
+    iwwapi.sendMessage(img);
+  }
+
   public void SSO(String state) {
     if (iwwapi == null) {
       return;
