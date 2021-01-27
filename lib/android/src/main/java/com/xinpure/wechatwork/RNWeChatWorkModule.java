@@ -1,7 +1,6 @@
 
 package com.xinpure.wechatwork;
 
-import android.Manifest;
 import android.util.Log;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -168,7 +167,6 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  // public void shareImage(final ReadableMap data) {
   public void shareImage(String url) {
     FileInputStream fs = null;
     try{
@@ -176,15 +174,22 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
         return;
       }
 
+      if (url.indexOf("file://") > -1) {
+        url = url.substring(7);
+      }
+
       fs = new FileInputStream(url);
       Bitmap bmp  = BitmapFactory.decodeStream(fs);
-
       WWMediaImage img = new WWMediaImage();
-      img.fileName = "test";
       img.transaction = "img";
       img.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
-      // img.filePath = data.getString("imageUrl");
-      img.filePath = url;
+
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      // 质量压缩方法，这里100表示第一次不压缩，把压缩后的数据缓存到 baos
+      bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+      img.fileData = baos.toByteArray();
+
+      bmp.recycle();
       img.appId = APPID;
       img.agentId = AGENTID;
       iwwapi.sendMessage(img);
