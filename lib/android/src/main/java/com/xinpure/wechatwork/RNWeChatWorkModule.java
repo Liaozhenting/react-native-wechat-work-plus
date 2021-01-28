@@ -167,7 +167,7 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void shareImage(String url) {
+  public void shareLocalImage(String url) {
     FileInputStream fs = null;
     try{
       if (iwwapi == null) {

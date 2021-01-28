@@ -93,6 +93,17 @@ RCT_EXPORT_METHOD(SSOAuth:(NSString *)state)
     return true;
 }
 
+// 分享本地图片
+RCT_EXPORT_METHOD(shareLocalImage:(NSString *)url) {
+    WWKSendMessageReq *req = [[WWKSendMessageReq alloc] init];
+    WWKMessageImageAttachment *attachment = [[WWKMessageImageAttachment alloc] init];
+    // 示例用图片，请填写你想分享的实际图片路径和名称
+    attachment.filename = @"test.gif";
+    attachment.path = url;
+    req.attachment = attachment;
+    [WWKApi sendReq:req];
+}
+
 RCT_EXPORT_METHOD(shareLinkAttachment:(NSString *)title :(NSString *)summary :(NSString *)url) {
     WWKSendMessageReq *req = [[WWKSendMessageReq alloc] init];
     WWKMessageLinkAttachment *attachment = [[WWKMessageLinkAttachment alloc] init];
