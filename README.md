@@ -1,5 +1,7 @@
 
-# react-native-wechat-work
+# react-native-wechat-work-gf
+
+基于react-native-wechat-work改造，该项目地址：https://github.com/xinpureZhu/react-native-wechat-work
 
 ## Reference
 

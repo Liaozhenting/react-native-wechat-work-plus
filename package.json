@@ -1,7 +1,7 @@
 {
-  "name": "react-native-wechat-work",
-  "version": "0.0.3",
-  "description": "react-native 企业微信登录, 支持 iOS + Android",
+  "name": "react-native-wechat-work-plus",
+  "version": "0.0.1",
+  "description": "react-native 企业微信分享, 支持 iOS + Android",
   "main": "lib/index.js",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -14,6 +14,7 @@
   "keywords": [
     "wechat",
     "wechat-work",
+    "wechat-work-plus",
     "react",
     "react-native",
     "react-component",

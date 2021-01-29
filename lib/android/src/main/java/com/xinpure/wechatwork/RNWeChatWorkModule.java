@@ -2,6 +2,13 @@
 package com.xinpure.wechatwork;
 
 import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -40,6 +47,37 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
   private final static String NOT_REGISTERED = "registerApp required.";
   private final static String INVOKE_FAILED = "WeChat API invoke returns false.";
   private final static String INVALID_ARGUMENT = "invalid argument.";
+
+  // 缩略图大小 kb
+  private final static int THUMB_SIZE = 32;
+
+  private static byte[] bitmapTopBytes(Bitmap bitmap) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    bitmap.recycle();
+    return baos.toByteArray();
+  }
+
+  private static byte[] bitmapResizeGetBytes(Bitmap image, int size) {
+    // little-snow-fox 2019.10.20
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    // 质量压缩方法，这里100表示第一次不压缩，把压缩后的数据缓存到 baos
+    image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    int options = 100;
+    // 循环判断压缩后依然大于 32kb 则继续压缩
+    while (baos.toByteArray().length / 1024 > size) {
+      // 重置baos即清空baos
+      baos.reset();
+      if (options > 10) {
+        options -= 8;
+      } else {
+        return bitmapResizeGetBytes(Bitmap.createScaledBitmap(image, 280, image.getHeight() / image.getWidth() * 280, true), size);
+      }
+      // 这里压缩options%，把压缩后的数据存放到baos中
+      image.compress(Bitmap.CompressFormat.JPEG, options, baos);
+    }
+    return baos.toByteArray();
+  }
 
   public RNWeChatWorkModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -126,6 +164,39 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
     link.appId = APPID;
     link.agentId = AGENTID;
     iwwapi.sendMessage(link);
+  }
+
+  @ReactMethod
+  public void shareLocalImage(String url) {
+    FileInputStream fs = null;
+    try{
+      if (iwwapi == null) {
+        return;
+      }
+
+      if (url.indexOf("file://") > -1) {
+        url = url.substring(7);
+      }
+
+      fs = new FileInputStream(url);
+      Bitmap bmp  = BitmapFactory.decodeStream(fs);
+      WWMediaImage img = new WWMediaImage();
+      img.transaction = "img";
+      img.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      // 质量压缩方法，这里100表示第一次不压缩，把压缩后的数据缓存到 baos
+      bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+      img.fileData = baos.toByteArray();
+
+      bmp.recycle();
+      img.appId = APPID;
+      img.agentId = AGENTID;
+      iwwapi.sendMessage(img);
+    } catch (FileNotFoundException err){
+      err.printStackTrace();
+    }
+
   }
 
   public void SSO(String state) {

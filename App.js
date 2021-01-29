@@ -5,10 +5,8 @@
  * @format
  * @flow
  */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
@@ -29,7 +27,10 @@ export default class App extends Component {
   }
   async componentDidMount() {
     try {
-      await WeChatWork.registerApp('11', '22', '33');
+      const schema = 'schema';
+      const corpID = 'corpID';
+      const agentId = 'agentId';
+      await WeChatWork.registerApp(schema, corpID, agentId);
       this.setState({
         apiVersion: await WeChatWork.getApiVersion(),
         appInstallUrl: await WeChatWork.getAppInstallUrl(),
@@ -56,14 +57,21 @@ export default class App extends Component {
           <Text>企业微信登录</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.shareLinkArrachment} >
-          <Text style={{height: 40}} >微信分享</Text>
+          <Text style={{height: 40}} >企业微信分享链接</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.shareImage} >
+          <Text style={{height: 40}} >企业微信分享图片</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
   async shareLinkArrachment() {
-    const aa = await WeChatWork.shareLinkAttachment('titleeeee', 'summaryyy', "http://cdn2.mdxz.pagoda.com.cn/邵业程_广东省深圳市宝安区石岩街道塘头村_20190603031357.pdf")
+    const aa = await WeChatWork.shareLinkAttachment('titleeeee', 'summaryyy', "http://cdn2.mdxz.pagoda.com.cn/邵业程_广东省深圳市宝安区石岩街道塘头村_20190603031357.pdf");
+  }
+
+  async shareImage() {
+    const aa = await WeChatWork.shareImage('/sdcard0/DCIM/Camera/IMG_20210124_122854.jpg');
   }
 
   async auth() {
