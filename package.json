@@ -1,6 +1,6 @@
 {
   "name": "react-native-wechat-work-plus",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "react-native 企业微信分享, 支持 iOS + Android",
   "main": "lib/index.js",
   "scripts": {
@@ -24,11 +24,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "react-native": "^0.41.2"
-  },
-  "dependencies": {
-    "react": "16.8.3",
-    "react-native": "0.59.5"
+    "react-native": ">=0.41.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
