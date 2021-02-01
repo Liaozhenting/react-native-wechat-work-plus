@@ -21,5 +21,5 @@ target 'WeChatWorkExample' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'react-native-wechat-work-plus', path: '../lib/ios/'
+  pod 'react-native-wechat-work', path: '../lib/ios/'
 end
