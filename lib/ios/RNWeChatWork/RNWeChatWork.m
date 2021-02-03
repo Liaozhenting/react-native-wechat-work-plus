@@ -94,26 +94,26 @@ RCT_EXPORT_METHOD(SSOAuth:(NSString *)state)
 }
 
 // 分享本地图片
-RCT_EXPORT_METHOD(shareLocalImage:(NSString *)url) {
+RCT_EXPORT_METHOD(shareLocalImage:(NSDictionary *)data) {
     WWKSendMessageReq *req = [[WWKSendMessageReq alloc] init];
     WWKMessageImageAttachment *attachment = [[WWKMessageImageAttachment alloc] init];
     // 示例用图片，请填写你想分享的实际图片路径和名称
     attachment.filename = @"test.gif";
-    attachment.path = url;
+    attachment.path = data[@"imageUrl"];
     req.attachment = attachment;
     [WWKApi sendReq:req];
 }
 
-RCT_EXPORT_METHOD(shareLinkAttachment:(NSString *)title :(NSString *)summary :(NSString *)url) {
+RCT_EXPORT_METHOD(shareLinkAttachment:(NSDictionary *)data) {
     WWKSendMessageReq *req = [[WWKSendMessageReq alloc] init];
     WWKMessageLinkAttachment *attachment = [[WWKMessageLinkAttachment alloc] init];
     // 示例用链接，请填写你想分享的实际链接的标题、介绍、图标和URL
-    attachment.title = title;
-    if (summary) {
-        attachment.summary = summary;
+    attachment.title = data[@"title"];
+    if (data[@"description"]) {
+        attachment.summary = data[@"description"];
     }
-    attachment.url = url;
-    attachment.icon = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"icon" ofType:@"jpg"]];
+    attachment.url = data[@"webpageUrl"];
+    attachment.iconurl = data[@"thumbUrl"];
     req.attachment = attachment;
     [WWKApi sendReq:req];
 }
