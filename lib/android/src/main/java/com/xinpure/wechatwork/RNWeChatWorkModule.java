@@ -153,28 +153,29 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void shareLinkAttachment(String title, String summary, String url) {
+  public void shareLinkAttachment(ReadableMap data) {
     if (iwwapi == null) {
       return;
     }
     WWMediaLink link = new WWMediaLink();
-    link.description = summary;
-    link.webpageUrl = url;
-    link.title = title;
+    link.description = data.getString("description");
+    link.webpageUrl = data.getString("webpageUrl");
+    link.thumbUrl = data.getString("thumbUrl");
+    link.title = data.getString("title");
     link.appId = APPID;
     link.agentId = AGENTID;
     iwwapi.sendMessage(link);
   }
 
   @ReactMethod
-  public void shareLocalImage(String url) {
+  public void shareLocalImage(ReadableMap data) {
     FileInputStream fs = null;
     try{
       if (iwwapi == null) {
         return;
       }
-
-      if (url.indexOf("file://") > -1) {
+      String url = data.getString("imageUrl");
+      if (url.indexOf("file://") > -1) {    
         url = url.substring(7);
       }
 
