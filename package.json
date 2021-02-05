@@ -1,6 +1,6 @@
 {
   "name": "react-native-wechat-work-plus",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "react-native 企业微信分享, 支持 iOS + Android",
   "main": "lib/index.js",
   "scripts": {

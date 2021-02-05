@@ -4,11 +4,15 @@ package com.xinpure.wechatwork;
 import android.util.Log;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.IOException;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -50,6 +54,8 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
 
   // 缩略图大小 kb
   private final static int THUMB_SIZE = 32;
+
+  private String photoPath = "";
 
   private static byte[] bitmapTopBytes(Bitmap bitmap) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -170,34 +176,55 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void shareLocalImage(ReadableMap data) {
     FileInputStream fs = null;
-    try{
+    try {
       if (iwwapi == null) {
         return;
       }
       String url = data.getString("imageUrl");
-      if (url.indexOf("file://") > -1) {    
+      if (url.indexOf("file://") > -1) {
         url = url.substring(7);
       }
 
       fs = new FileInputStream(url);
-      Bitmap bmp  = BitmapFactory.decodeStream(fs);
+      Bitmap bmp = BitmapFactory.decodeStream(fs);
       WWMediaImage img = new WWMediaImage();
+      if (bmp != null) {
+        saveImageToGallery(bmp);
+        img.filePath = this.photoPath;
+      }
       img.transaction = "img";
       img.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
       // 质量压缩方法，这里100表示第一次不压缩，把压缩后的数据缓存到 baos
-      bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-      img.fileData = baos.toByteArray();
 
       bmp.recycle();
       img.appId = APPID;
       img.agentId = AGENTID;
       iwwapi.sendMessage(img);
-    } catch (FileNotFoundException err){
+    } catch (FileNotFoundException err) {
       err.printStackTrace();
     }
 
+  }
+
+  public void saveImageToGallery(Bitmap bmp) {
+    // 首先保存图片
+    String storePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "weChat_share_temp";
+    File appDir = new File(storePath);
+    if (!appDir.exists()) {
+      appDir.mkdir();
+    }
+    String fileName = System.currentTimeMillis() + ".jpg";
+    File file = new File(appDir, fileName);
+    try {
+      FileOutputStream fos = new FileOutputStream(file);
+      //通过io流的方式来压缩保存图片
+      bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+      fos.flush();
+      fos.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    this.photoPath = storePath + "/" + fileName;
   }
 
   public void SSO(String state) {
@@ -225,7 +252,7 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
 
           if (rsp.errCode == WWAuthMessage.ERR_CANCEL) {
             map.putString("errStr", "SSOAuth Cancel");
-          }else if (rsp.errCode == WWAuthMessage.ERR_FAIL) {
+          } else if (rsp.errCode == WWAuthMessage.ERR_FAIL) {
             map.putString("errStr", "SSOAuth Failed");
           } else if (rsp.errCode == WWAuthMessage.ERR_OK) {
             map.putString("errStr", "SSOAuth OK");
