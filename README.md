@@ -1,7 +1,7 @@
 
-# react-native-wechat-work-gf
+# react-native-wechat-work-plus
 
-基于react-native-wechat-work改造，该项目地址：https://github.com/xinpureZhu/react-native-wechat-work
+基于react-native-wechat-work改造，该项目地址：https://github.com/xinpureZhu/react-native-wechat-work.
 
 ## Reference
 
@@ -9,11 +9,11 @@
 
 ## Getting started
 
-`$ npm install react-native-wechat-work --save`
+`$ npm install react-native-wechat-work-plus --save`
 
 ### Mostly automatic installation
 
-`$ react-native link react-native-wechat-work`
+`$ react-native link react-native-wechat-work-plus`
 
 ### Manual installation
 
@@ -21,7 +21,7 @@
 #### iOS
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-wechat-work` and add `RNWeChatWork.xcodeproj`
+2. Go to `node_modules` ➜ `react-native-wechat-work-plus` and add `RNWeChatWork.xcodeproj`
 3. In XCode, in the project navigator, select your project. Add `libRNWeChatWork.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
@@ -32,8 +32,8 @@
   - Add `new RNWeChatWorkPackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```
-  	include ':react-native-wechat-work'
-  	project(':react-native-wechat-work').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-wechat-work/lib/android')
+  	include ':react-native-wechat-work-plus'
+  	project(':react-native-wechat-work').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-wechat-work-plus/lib/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
@@ -43,7 +43,7 @@
 
 ## Usage
 ```javascript
-import RNWeChatWork from 'react-native-wechat-work';
+import RNWeChatWork from 'react-native-wechat-work-plus';
 
 // TODO: What to do with the module?
 RNWeChatWork;

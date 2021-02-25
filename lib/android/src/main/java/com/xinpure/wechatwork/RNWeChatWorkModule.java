@@ -193,7 +193,7 @@ public class RNWeChatWorkModule extends ReactContextBaseJavaModule {
         img.filePath = this.photoPath;
       }
       img.transaction = "img";
-      img.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
+//      img.thumbData = bitmapResizeGetBytes(bmp, THUMB_SIZE);
       // 质量压缩方法，这里100表示第一次不压缩，把压缩后的数据缓存到 baos
 
       bmp.recycle();
