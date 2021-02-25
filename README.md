@@ -1,10 +1,8 @@
 
 # react-native-wechat-work-plus
 
-基于react-native-wechat-work改造，该项目地址：https://github.com/xinpureZhu/react-native-wechat-work.
-
 ## Reference
-
+[react-native-wechat-work](https://github.com/xinpureZhu/react-native-wechat-work)
 [react-native-wechat](https://github.com/yorkie/react-native-wechat)
 
 ## Getting started
@@ -33,7 +31,7 @@
 2. Append the following lines to `android/settings.gradle`:
   	```
   	include ':react-native-wechat-work-plus'
-  	project(':react-native-wechat-work').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-wechat-work-plus/lib/android')
+  	project(':react-native-wechat-work-plus').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-wechat-work-plus/lib/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
@@ -45,8 +43,36 @@
 ```javascript
 import RNWeChatWork from 'react-native-wechat-work-plus';
 
-// TODO: What to do with the module?
-RNWeChatWork;
+const WECHAT_WORK_SCHEMA = 'wwauth-xxxxxxxxxxxxxxxxx';
+const WECHAT_WORK_CORP_ID = 'wx-xxxxxxxxxxxxxx';
+const WECHAT_WORK_AGENT_ID = '10xxxxxxxxxx';
+
+WeChatWork.registerApp(
+  WECHAT_WORK_SCHEMA,
+  WECHAT_WORK_CORP_ID,
+  WECHAT_WORK_AGENT_ID
+);
+
+// 分享本地图片
+WeChatWork.shareImage({imageUrl: '本地图片地址'}).then(resp => {
+  ...
+}).catch( err => {
+  ...
+})
+
+// 分享链接
+WeChatWork.shareImage({
+  title: data.title,
+  description: data.description,
+  thumbUrl: data.image,
+  webpageUrl: data.url,
+  scene: scene
+}).then(resp => {
+  ...
+}).catch( err => {
+  ...
+})
+
 ```
 
 ## Run Example
